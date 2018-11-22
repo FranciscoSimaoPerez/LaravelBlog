@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{$data['title']}}</title>
+    <title>{{$title}}</title>
 
     <!-- Bootswatch -->
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
@@ -13,12 +13,13 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
 
-
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
 </head>
 
 <body>
     @include('partials.navbar')
-    <div class="container mt-3">
+    <div class="container mt-4">
         @yield('content')
     </div>
 

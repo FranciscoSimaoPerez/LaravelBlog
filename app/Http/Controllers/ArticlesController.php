@@ -14,8 +14,10 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Article::all();
-        return view('pages.articles.index', compact('articles'));
+        $title = "Articles";
+        $articles = Article::orderBy('created_at','asc')->paginate(5);
+        return view('pages.articles.index')->with('articles', $articles)
+                                           ->with('title', $title);
     }
 
     /**
@@ -47,7 +49,9 @@ class ArticlesController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        $title = $article->title;
+        return view('pages.articles.show')->with('article', $article)
+                                          ->with('title', $title);
     }
 
     /**
