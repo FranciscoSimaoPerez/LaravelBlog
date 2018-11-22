@@ -27,7 +27,8 @@ class ArticlesController extends Controller
      */
     public function create()
     {
-        return view('pages.articles.create');
+        $title = "Articles";
+        return view('pages.articles.create')->with('title', $title);
     }
 
     /**
@@ -39,14 +40,14 @@ class ArticlesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' =>'required|min_length=3'
+            'title' =>'required|min_length=3',
         ]);
 
         //Create Article
         $article = new Article;
         $article->title = $request->input('title');
-        $article->title = $request->input('body');
-        $article->title = $request->input('featured');
+        $article->content = $request->input('content');
+        $article->featured = $request->input('featured');
         $article->save();
         
     }

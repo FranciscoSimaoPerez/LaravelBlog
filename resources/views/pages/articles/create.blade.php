@@ -5,15 +5,15 @@
 <a href="/articles" class="btn btn-primary">Go back</a>
 <hr>
 <div>
-    <div class="jumbotron articles bg-light">
+    <div class="jumbotron bg-light">
         {!! Form::open(['action' => 'ArticlesController@store', 'method' => 'POST']) !!}
         <div class="form-group">
             {{ Form::label('title', 'Title') }}
-            {{ Form::text('title', '', ['class' => 'form-control', 'placeholder' => 'Title'])) }}
+            {{ Form::text('title', '', ['class' => 'form-control', 'placeholder' => 'Title']) }}
         </div>
         <div class="form-group">
             {{ Form::label('content', 'Content') }}
-            {{ Form::text('content', '', ['class' => 'form-control', 'placeholder' => 'Content'])) }}
+            {{ Form::textarea('content', '', ['class' => 'form-control', 'placeholder' => 'Content']) }}
         </div>
         {{ Form::submit('Submit', ['class'=>'btn btn-success'])}}
         {!! Form::close() !!}
