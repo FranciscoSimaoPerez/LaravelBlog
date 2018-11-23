@@ -3,6 +3,14 @@
 @section('content')
 
 <h1>Articles</h1>
+<div class="Sort">
+    <div class="row mb-4">
+        <div class="col">
+            <input type="button" value="Order Asc" class="btn btn-primary">
+            <input type="button" value="Order Desc"  class="btn btn-primary">
+        </div>
+    </div>
+</div>
 @if (count($articles)>0)
     @foreach ($articles as $article)
     <a href="{{ route('articles.show',[$article->id])}}">

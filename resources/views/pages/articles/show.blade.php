@@ -24,5 +24,6 @@
         </div>
         <small>Created at {{$article->created_at}}</small>
     </div>
+    <a href="{{ route('articles.edit',[$article->id])}}" class="btn btn-primary">Editar</a>
 <div>
 @endsection
