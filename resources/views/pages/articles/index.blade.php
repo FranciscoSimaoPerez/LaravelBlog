@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    
+
 <h1>Articles</h1>
 @if (count($articles)>0)
     @foreach ($articles as $article)
-    <a href="/articles/{{$article->id}}">
+    <a href="{{ route('articles.show',[$article->id])}}">
         <div class="jumbotron articles bg-light">
             <div class="row">
                 <div class="col-8">
@@ -34,5 +34,5 @@
         <p>No articles found</p>
     </div>
 @endif
-    
+
 @endsection

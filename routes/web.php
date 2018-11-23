@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', 'PagesController@index');
+Route::get('/', 'PagesController@index')->name('pages.index');
 
 Route::resource('articles', 'ArticlesController');

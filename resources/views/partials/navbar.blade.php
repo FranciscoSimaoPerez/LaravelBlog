@@ -8,13 +8,13 @@
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="{{ route('pages.index') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
+                <a class="nav-link" href="{{ route('articles.index') }}">Articles</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
+                <a class="nav-link" href="{{ route('articles.create') }}">Create</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">About</a>

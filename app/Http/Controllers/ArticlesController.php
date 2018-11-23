@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Http\Request;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
@@ -40,16 +41,21 @@ class ArticlesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' =>'required|min_length=3',
+            'title' =>'required|min:3',
+            'content' =>'nullable'
         ]);
 
         //Create Article
         $article = new Article;
         $article->title = $request->input('title');
         $article->content = $request->input('content');
-        $article->featured = $request->input('featured');
+        if(request('featured') == 'on'){
+            $article->featured=1;
+        } else {
+            $article->featured=0;
+        }
         $article->save();
-        
+        return redirect()->route('articles.index');
     }
 
     /**
