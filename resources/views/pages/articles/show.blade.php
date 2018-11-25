@@ -1,35 +1,49 @@
 @extends('layouts.app')
 
 @section('content')
-<a href="/articles" class="btn btn-primary">Go back</a>
-<hr>
+
+<div class="header">
+    <div class="mb-4 bg-dark">
+        <div class="col pt-2 pb-2">
+            <a href="/articles" class="btn btn-primary">Go back</a>
+        </div>
+    </div>
+</div>
 <div>
-    <div class="jumbotron articles bg-light">
+    <div class="container bg-light mt-3">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12">
                 <div class="row">
+                    <img src="{{asset('storage/cover_images/'.$article->img)}}" style="width: 100%">
+                </div>
+                <div class="row m-3">
                     <div class="title @if($article->featured == 1) font-weight-bold @endif">
-                        <h3>{{$article->title}}</h3>
+                        <h1>{{$article->title}}</h1>
                     </div>
                 </div>
-                <div class="row">
+                @if($article->content != null)
+                <div class="row m-3">
                     <div class="content @if($article->featured == 1) font-weight-bold @endif">
                         {{$article->content}}
                     </div>
                 </div>
+                @endif
             </div>
-            <div class="col-4">
-                <img src="/img.png" style="width: 100%">
-            </div>
+            
         </div>
-        <small>Created at {{$article->created_at}}</small>
+        <hr>
+        <div class="row m-3">
+            <small>Created at {{$article->created_at}}</small>
+        </div>
+        <br>
     </div>
-    
-    <form  action="{{ route('articles.destroy',[$article->id]) }}" method="POST">
-        <a href="{{ route('articles.edit',[$article->id])}}" class="btn btn-warning">Editar</a>
-        <input type="submit" value="Delete" class="btn btn-danger">
-        @method('DELETE')
-        @csrf     
-    </form>
+    <div class="mt-3">
+        <form  action="{{ route('articles.destroy',[$article->id]) }}" method="POST">
+            <a href="{{ route('articles.edit',[$article->id])}}" class="btn btn-warning">Editar</a>
+            <input type="submit" value="Delete" class="btn btn-danger">
+            @method('DELETE')
+            @csrf     
+        </form>
+    </div>
 <div>
 @endsection

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 class ArticlesController extends Controller
 {
     /**
@@ -15,19 +15,22 @@ class ArticlesController extends Controller
     public function index()
     {
         $title = "Articles";
-
-        // o tipo de ordenação é guardado na sessão
-        $order = $request->session()->get('order', 'desc');
         
         // dados do pedido get
         $search = \Request::get('search');
+        $sort = \Request::get('sort');
+        
+        //Ordenação default
+        if($sort == null){
+            $sort = 'desc';
+        }
 
         if($search == null){
-            $articles = Article::orderBy('created_at', $order)->paginate(5);
+            $articles = Article::orderBy('created_at', $sort)->paginate(5);
         } else {
-            $articles = Article::orderBy('created_at', $order)
-                            ->where('title', 'like', '% '.$search.' %')
-                            ->orWhere('content', 'like', '% '.$search.' %')
+            $articles = Article::orderBy('created_at', $sort)
+                            ->where('title', 'like', '%'.$search.'%')
+                            ->orWhere('content', 'like', '%'.$search.'%')
                             ->paginate(5);
         }
        
@@ -77,17 +80,17 @@ class ArticlesController extends Controller
         ]);
 
         // File Upload
-        if($request->hasfile('img')){
-            // Recebee o nome do ficheiro e extensão
-            $fileNameWithExt = $request->file('img')->getClientOriginalName();
-            
+        if($request->hasfile('img-upload')){
+            // Recebe o nome do ficheiro e extensão
+            $fileNameWithExt = $request->file('img-upload')->getClientOriginalName();
+            // obtem o nome do ficheiro
             $filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
-
-            $extension = $request->file('img')->getClientOriginalExtension();
-        
+            // obtem a extensão
+            $extension = $request->file('img-upload')->getClientOriginalExtension();
+            // criado o nome do ficheiro a ser guardado
             $fileNameToStore = $filename.'_'.time().'.'.$extension;
-
-            $path = $request->file('cover_image')->storeAs('public/cover_images',$fileNameToStore);
+            // caminho onde o ficheiro será guardado
+            $path = $request->file('img-upload')->storeAs('public/cover_images',$fileNameToStore);
         } else {
             $fileNameToStore = 'noimage.jpg';
         }
@@ -96,6 +99,7 @@ class ArticlesController extends Controller
         $article = new Article;
         $article->title = $request->input('title');
         $article->content = $request->input('content');
+        $article->img = $fileNameToStore;
         if(request('featured') == 'on'){
             $article->featured=1;
         } else {
@@ -145,6 +149,19 @@ class ArticlesController extends Controller
             'content' =>'nullable'
         ]);
 
+        if($request->hasfile('img-upload')){
+            // Recebe o nome do ficheiro e extensão
+            $fileNameWithExt = $request->file('img-upload')->getClientOriginalName();
+            // obtem o nome do ficheiro
+            $filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+            // obtem a extensão
+            $extension = $request->file('img-upload')->getClientOriginalExtension();
+            // criado o nome do ficheiro a ser guardado
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            // caminho onde o ficheiro será guardado
+            $path = $request->file('img-upload')->storeAs('public/cover_images',$fileNameToStore);
+        }
+
         //Update Article
         $article->title = $request->input('title');
         $article->content = $request->input('content');
@@ -152,6 +169,9 @@ class ArticlesController extends Controller
             $article->featured=1;
         } else {
             $article->featured=0;
+        }
+        if($request->hasFile('img-upload')){
+            $article->img = $fileNameToStore;
         }
         $article->save();
         return redirect()->route('articles.show',[$article->id])->with('success', 'Article Updated');
@@ -165,6 +185,10 @@ class ArticlesController extends Controller
      */
     public function destroy(Article $article)
     {
+        if($article->img != 'noimage.jpg'){
+            //Eliminar imagem 
+            Storage::delete('public/cover_images/'.$article->img);
+        }
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'Article Deleted');
     }

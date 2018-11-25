@@ -20,7 +20,7 @@
                 <input type="checkbox" name="featured" id="featured" @if($article->featured == 1) checked @endif>
             </div>
             <div class="form-group">
-                <input type="file" name="upload" id="upload">
+                <input type="file" name="img-upload" id="img-upload">
             </div>
             @method('PUT')
             @csrf

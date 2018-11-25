@@ -20,7 +20,7 @@
                 <input type="checkbox" name="featured" id="featured">
             </div>
             <div class="form-group">
-                <input type="file" name="upload" id="upload">
+                <input type="file" name="img-upload" id="img-upload">
             </div>
             @csrf
             <input type="submit" value="submit" class="btn btn-success">
