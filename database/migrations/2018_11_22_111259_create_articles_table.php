@@ -19,6 +19,7 @@ class CreateArticlesTable extends Migration
             $table->text('content')->nullable();
             $table->boolean('featured')->nullable();
             $table->timestamps();
+            $table->string('img');
         });
     }
 

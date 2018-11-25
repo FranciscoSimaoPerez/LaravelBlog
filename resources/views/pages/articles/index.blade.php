@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h1>Articles</h1>
+<h1>{{$title}}</h1>
 <div class="Sort">
     <div class="row mb-4">
         <div class="col">
@@ -16,17 +16,19 @@
     <a href="{{ route('articles.show',[$article->id])}}">
         <div class="jumbotron articles bg-light">
             <div class="row">
-                <div class="col-8">
+                <div class="col-7">
                     <div class="row">
-                        <div class="title">
+                        <div class="title @if($article->featured == 1) font-weight-bold @endif">
                             <h3>{{$article->title}}</h3>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="content">
+                        <div class="content @if($article->featured == 1) font-weight-bold @endif">
                             {{$article->content}}
                         </div>
                     </div>
+                </div>
+                <div class="col">
                 </div>
                 <div class="col-4">
                     <img src="/img.png" style="width: 100%">
@@ -36,11 +38,13 @@
         </div>
     </a>
     @endforeach
-    {{$articles->links()}}
+    {{ $articles->appends(\Request::except('_token'))->render() }}
 @else
+<div class="jumbotron bg-light">
     <div class="row">
         <p>No articles found</p>
     </div>
+</div>
 @endif
 
 @endsection

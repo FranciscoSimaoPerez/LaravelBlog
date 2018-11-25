@@ -13,4 +13,6 @@
 
 Route::get('/', 'PagesController@index')->name('pages.index');
 
+Route::get('/articles/featured', 'ArticlesController@featured')->name('articles.featured');
+
 Route::resource('articles', 'ArticlesController');

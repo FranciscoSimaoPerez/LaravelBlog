@@ -20,6 +20,7 @@
 <body>
     @include('partials.navbar')
     <div class="container mt-4">
+        @include('partials.messages')
         @yield('content')
     </div>
 

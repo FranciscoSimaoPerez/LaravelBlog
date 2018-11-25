@@ -8,12 +8,12 @@
         <div class="row">
             <div class="col-8">
                 <div class="row">
-                    <div class="title">
+                    <div class="title @if($article->featured == 1) font-weight-bold @endif">
                         <h3>{{$article->title}}</h3>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="content">
+                    <div class="content @if($article->featured == 1) font-weight-bold @endif">
                         {{$article->content}}
                     </div>
                 </div>
@@ -24,6 +24,12 @@
         </div>
         <small>Created at {{$article->created_at}}</small>
     </div>
-    <a href="{{ route('articles.edit',[$article->id])}}" class="btn btn-primary">Editar</a>
+    
+    <form  action="{{ route('articles.destroy',[$article->id]) }}" method="POST">
+        <a href="{{ route('articles.edit',[$article->id])}}" class="btn btn-warning">Editar</a>
+        <input type="submit" value="Delete" class="btn btn-danger">
+        @method('DELETE')
+        @csrf     
+    </form>
 <div>
 @endsection

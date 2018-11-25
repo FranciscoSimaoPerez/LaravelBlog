@@ -15,7 +15,38 @@ class ArticlesController extends Controller
     public function index()
     {
         $title = "Articles";
-        $articles = Article::orderBy('created_at','asc')->paginate(5);
+
+        // o tipo de ordenação é guardado na sessão
+        $order = $request->session()->get('order', 'desc');
+        
+        // dados do pedido get
+        $search = \Request::get('search');
+
+        if($search == null){
+            $articles = Article::orderBy('created_at', $order)->paginate(5);
+        } else {
+            $articles = Article::orderBy('created_at', $order)
+                            ->where('title', 'like', '% '.$search.' %')
+                            ->orWhere('content', 'like', '% '.$search.' %')
+                            ->paginate(5);
+        }
+       
+        return view('pages.articles.index')->with('articles', $articles)
+                                           ->with('title', $title);
+    }
+
+    /**
+     * Display a search listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function featured()
+    {
+        $title = "Featured Articles";
+
+        $articles = Article::orderBy('created_at','desc')
+                            ->where('featured', '=', 1)
+                            ->paginate(5);
         return view('pages.articles.index')->with('articles', $articles)
                                            ->with('title', $title);
     }
@@ -54,7 +85,7 @@ class ArticlesController extends Controller
             $article->featured=0;
         }
         $article->save();
-        return redirect()->route('articles.index');
+        return redirect()->route('articles.index')->with('success', 'Article Created');
     }
 
     /**
@@ -78,7 +109,9 @@ class ArticlesController extends Controller
      */
     public function edit(Article $article)
     {
-        //
+        $title = "Edit - " . $article->title;
+        return view('pages.articles.edit')->with('article', $article)
+                                          ->with('title', $title);
     }
 
     /**
@@ -90,7 +123,21 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        $this->validate($request, [
+            'title' =>'required|min:3',
+            'content' =>'nullable'
+        ]);
+
+        //Update Article
+        $article->title = $request->input('title');
+        $article->content = $request->input('content');
+        if(request('featured') == 'on'){
+            $article->featured=1;
+        } else {
+            $article->featured=0;
+        }
+        $article->save();
+        return redirect()->route('articles.show',[$article->id])->with('success', 'Article Updated');
     }
 
     /**
@@ -101,6 +148,7 @@ class ArticlesController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $article->delete();
+        return redirect()->route('articles.index')->with('success', 'Article Deleted');
     }
 }
