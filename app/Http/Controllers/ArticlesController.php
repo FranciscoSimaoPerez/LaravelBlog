@@ -71,9 +71,26 @@ class ArticlesController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' =>'required|min:3',
-            'content' =>'nullable'
+            'title' => 'required|min:3',
+            'content' => 'nullable',
+            'image' => 'image|nullable|max:2000'
         ]);
+
+        // File Upload
+        if($request->hasfile('img')){
+            // Recebee o nome do ficheiro e extensão
+            $fileNameWithExt = $request->file('img')->getClientOriginalName();
+            
+            $filename = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+
+            $extension = $request->file('img')->getClientOriginalExtension();
+        
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+
+            $path = $request->file('cover_image')->storeAs('public/cover_images',$fileNameToStore);
+        } else {
+            $fileNameToStore = 'noimage.jpg';
+        }
 
         //Create Article
         $article = new Article;
